@@ -21,10 +21,11 @@ dbConnection();
 
 //console.log(process.env);
 
-
+ 
 
 
 //rutas
+
 app.get( '/', (req, res) => {
     res.json({
         ok: true,
