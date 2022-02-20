@@ -1,3 +1,6 @@
+//npm run start:dev
+
+
 require('dotenv').config();
 
 const express = require('express') ;
@@ -21,6 +24,11 @@ app.use( express.json() );
 //conexion a la base de datos.
 dbConnection();
 
+//Para probar el Login de google.
+//directorio publico.
+app.use(express.static('public'));
+
+
 //console.log(process.env);
 
 //rutas
@@ -28,6 +36,7 @@ app.use('/api/usuarios', require('./routes/usuarios.js'));
 app.use('/api/hospitales', require('./routes/hospitales.js'));
 app.use('/api/medicos', require('./routes/medicos.js'));
 app.use('/api/auth', require('./routes/auth.js'));
+app.use('/api/login', require('./routes/auth.js'));
 app.use('/api/todo', require('./routes/busquedas.js'));
 app.use('/api/upload', require('./routes/uploads.js'));
 
