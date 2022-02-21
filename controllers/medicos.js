@@ -7,7 +7,7 @@ const getMedicos = async (req, res = response) => {
 
     const medicos = await Medico.find()
                         .populate('usuario', 'nombre img')    
-                        .populate('hospital', 'nombre')
+                        .populate('hospital', 'nombre img')
 
     res.json({
         ok: true,
@@ -43,43 +43,66 @@ const crearMedico =  async (req, res = response) => {
 
 
 const actualizarMedico = async (req, res = response) => {
+    
+    const id = req.params.id;
+    const uid = req.uid;
 
     try {
+        const medico = await Medico.findById(id);
+        if(!medico){
+            return res.status(404).json({
+               ok: false,
+               msg: "El medico no existe por Id"     
+            });
+        }
+
+        const actualizarMedico = {
+            ...req.body,
+            uid
+        }
+
+        const medicoActualizado = await Medico.findByIdAndUpdate(id, actualizarMedico, {new:true});
 
         res.json({
             ok:true,
-            msg: "Actualizar Medico"
+            medicoActualizado
         });
             
     } catch (error) {
         console.log(error);
-            res.status(500).json({
-                ok: false,
-                msg: 'Error inesperado.'
-        
-            });
-
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador'
+        });
     }
 }
 
 
 
 const borrarMedico = async (req, res = response) => {
+    const id = req.params.id;
 
     try {
-        
+        const medico = await Medico.findById(id);    
+        if(!medico){
+            return res.status(404).json({
+               ok: false,
+               msg: "El medico no existe por Id"     
+            });
+        }
+        await Medico.findByIdAndDelete(id);
         res.json({
             ok:true,
-            msg: "Borrar Medico"
+            msg: "Medico borrado"
         });
             
     } catch (error) {
         console.log(error);
-            res.status(500).json({
-                ok: false,
-                msg: 'hable con el Administrador'
-        
-            });
+        res.status(500).json({
+            ok: false,
+            msg: 'hable con el Administrador'
+    
+        });
 
     }
 }

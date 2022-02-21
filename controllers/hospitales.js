@@ -42,21 +42,43 @@ const crearHospital =  async (req, res = response) => {
 
 
 const actualizarHospital = async (req, res = response) => {
-
+    
+    const id = req.params.id;
+    const uid = req.uid;   //viene del middleware validacionJWT
     try {
+        //1ro revidsar si existe el id
+        const hospital = await Hospital.findById( id);
+        if(!hospital){
+            return res.status(404).json({
+                ok:false,
+                msg:"Hospital no encontrado por Id"
+            });
+        }
+
+        //1ra forma
+        //hospital.nombre = req.body.nombre;
+        
+        //2da forma
+        const cambiosHospital = {
+            ...req.body,
+            uid    
+        }
+
+        //new:true, es para forzar actualizacion
+        const hospitalActualizado = await Hospital.findByIdAndUpdate(id, cambiosHospital, {new:true});
 
         res.json({
             ok:true,
-            msg: "Actualizar Hospital"
+            hospitalActualizado
         });
             
     } catch (error) {
         console.log(error);
-            res.status(500).json({
-                ok: false,
-                msg: 'Error inesperado.'
-        
-            });
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el Administrador.'
+    
+        });
 
     }
 }
@@ -65,20 +87,32 @@ const actualizarHospital = async (req, res = response) => {
 
 const borrarHospital = async (req, res = response) => {
 
+    const id = req.params.id;
+    const uid = req.uid;
+
     try {
-        
+        const hospital = Hospital.findById(id);
+        if(!hospital){
+            return res.status(404).json({
+                ok: false,
+                msg: "Hospital no encontrado por Id"
+            });
+        }
+
+        await Hospital.findByIdAndDelete( id );
+
         res.json({
-            ok:true,
-            msg: "Borrar Hospital"
+            ok: true,
+            msg: "Hospital eliminado"
         });
             
     } catch (error) {
         console.log(error);
-            res.status(500).json({
-                ok: false,
-                msg: 'hable con el Administrador'
-        
-            });
+        res.status(500).json({
+            ok: false,
+            msg: 'hable con el Administrador'
+    
+        });
 
     }
 }

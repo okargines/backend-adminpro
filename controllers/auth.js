@@ -102,8 +102,22 @@ const googleSignIn = async (req, res = response) => {
     }
 }    
 
+const renewToken = async (req, res=response ) => {
+
+    //El ( uid ) viene del middleware => de la funcion: validarJWT()
+    const uid = req.uid;
+
+    const token = await generarJWT(uid);
+    res.json({
+        ok: true,
+        token,
+        uid
+    });    
+}
+
 //module.exports = getUsuarios;  //retorna un metodo general
 module.exports = {             //para retornar varaios metodos
         login,
-        googleSignIn  
+        googleSignIn , 
+        renewToken
     }

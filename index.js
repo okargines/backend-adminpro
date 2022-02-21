@@ -35,7 +35,7 @@ app.use(express.static('public'));
 app.use('/api/usuarios', require('./routes/usuarios.js'));
 app.use('/api/hospitales', require('./routes/hospitales.js'));
 app.use('/api/medicos', require('./routes/medicos.js'));
-app.use('/api/auth', require('./routes/auth.js'));
+//app.use('/api/auth', require('./routes/auth.js'));
 app.use('/api/login', require('./routes/auth.js'));
 app.use('/api/todo', require('./routes/busquedas.js'));
 app.use('/api/upload', require('./routes/uploads.js'));
